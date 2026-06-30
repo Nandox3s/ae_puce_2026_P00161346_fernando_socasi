@@ -1,4 +1,4 @@
-﻿package com.pucetec.students.service
+﻿package com.pucetec.students.services
 
 import com.pucetec.students.dto.SubjectRequest
 import com.pucetec.students.dto.SubjectResponse

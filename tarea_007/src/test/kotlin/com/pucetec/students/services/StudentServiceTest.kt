@@ -1,12 +1,12 @@
-﻿package com.pucetec.students.service
+﻿package com.pucetec.students.services
 
-import com.pucetec.students.Mappers.ProfessorMapper
-import com.pucetec.students.dto.ProfessorRequest
-import com.pucetec.students.dto.ProfessorResponse
-import com.pucetec.students.entity.Professor
+import com.pucetec.students.Mappers.StudentMapper
+import com.pucetec.students.dto.StudentRequest
+import com.pucetec.students.dto.StudentResponse
+import com.pucetec.students.entity.Student
 import com.pucetec.students.exceptions.BlankMesaggeException
-import com.pucetec.students.exceptions.ProfessorNotFoundException
-import com.pucetec.students.repository.ProfessorRepository
+import com.pucetec.students.exceptions.StudentNotFoundException
+import com.pucetec.students.repository.StudentRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFailsWith
@@ -18,22 +18,22 @@ import org.mockito.junit.jupiter.MockitoExtension
 import java.util.Optional
 
 @ExtendWith(MockitoExtension::class)
-class ProfessorServiceTest {
+class StudentServiceTest {
 
     @Mock
-    private lateinit var repository: ProfessorRepository
+    private lateinit var repository: StudentRepository
 
     @Mock
-    private lateinit var mapper: ProfessorMapper
+    private lateinit var mapper: StudentMapper
 
     @InjectMocks
-    private lateinit var service: ProfessorService
+    private lateinit var service: StudentService
 
     @Test
     fun `create devuelve respuesta cuando el nombre es vÃ¡lido`() {
-        val req = ProfessorRequest(name = "Dr. GarcÃ­a", email = "garcia@test.com")
-        val entity = Professor(id = 1L, name = "Dr. GarcÃ­a", email = "garcia@test.com")
-        val response = ProfessorResponse(id = 1L, name = "Dr. GarcÃ­a", email = "garcia@test.com")
+        val req = StudentRequest(name = "Ana", email = "ana@test.com")
+        val entity = Student(id = 1L, name = "Ana", email = "ana@test.com")
+        val response = StudentResponse(id = 1L, name = "Ana", email = "ana@test.com")
 
         Mockito.`when`(mapper.toEntity(req)).thenReturn(entity)
         Mockito.`when`(repository.save(entity)).thenReturn(entity)
@@ -46,7 +46,7 @@ class ProfessorServiceTest {
 
     @Test
     fun `create lanza excepciÃ³n cuando el nombre estÃ¡ vacÃ­o`() {
-        val req = ProfessorRequest(name = "   ", email = "garcia@test.com")
+        val req = StudentRequest(name = "", email = "empty@test.com")
 
         assertFailsWith<BlankMesaggeException> {
             service.create(req)
@@ -54,9 +54,9 @@ class ProfessorServiceTest {
     }
 
     @Test
-    fun `getAll devuelve todos los profesores mapeados`() {
-        val entity = Professor(id = 2L, name = "Dr. LÃ³pez", email = "lopez@test.com")
-        val response = ProfessorResponse(id = 2L, name = "Dr. LÃ³pez", email = "lopez@test.com")
+    fun `getAll devuelve todos los estudiantes mapeados`() {
+        val entity = Student(id = 2L, name = "Luis", email = "luis@test.com")
+        val response = StudentResponse(id = 2L, name = "Luis", email = "luis@test.com")
 
         Mockito.`when`(repository.findAll()).thenReturn(listOf(entity))
         Mockito.`when`(mapper.toResponse(entity)).thenReturn(response)
@@ -67,9 +67,9 @@ class ProfessorServiceTest {
     }
 
     @Test
-    fun `getById devuelve profesor cuando existe`() {
-        val entity = Professor(id = 3L, name = "Dr. PÃ©rez", email = "perez@test.com")
-        val response = ProfessorResponse(id = 3L, name = "Dr. PÃ©rez", email = "perez@test.com")
+    fun `getById devuelve estudiante cuando existe`() {
+        val entity = Student(id = 3L, name = "Marta", email = "marta@test.com")
+        val response = StudentResponse(id = 3L, name = "Marta", email = "marta@test.com")
 
         Mockito.`when`(repository.findById(3L)).thenReturn(Optional.of(entity))
         Mockito.`when`(mapper.toResponse(entity)).thenReturn(response)
@@ -83,20 +83,20 @@ class ProfessorServiceTest {
     fun `getById lanza excepciÃ³n cuando no existe`() {
         Mockito.`when`(repository.findById(99L)).thenReturn(Optional.empty())
 
-        assertFailsWith<ProfessorNotFoundException> {
+        assertFailsWith<StudentNotFoundException> {
             service.getById(99L)
         }
     }
 
     @Test
     fun `update devuelve respuesta cuando el nombre es vÃ¡lido`() {
-        val req = ProfessorRequest(name = "Dr. GarcÃ­a Updated", email = "garcia.updated@test.com")
-        val existing = Professor(id = 4L, name = "Dr. GarcÃ­a", email = "garcia@test.com")
-        val updated = Professor(id = 4L, name = "Dr. GarcÃ­a Updated", email = "garcia.updated@test.com")
-        val response = ProfessorResponse(id = 4L, name = "Dr. GarcÃ­a Updated", email = "garcia.updated@test.com")
+        val req = StudentRequest(name = "Ana Updated", email = "ana.updated@test.com")
+        val existing = Student(id = 4L, name = "Ana", email = "ana@test.com")
+        val updated = Student(id = 4L, name = "Ana Updated", email = "ana.updated@test.com")
+        val response = StudentResponse(id = 4L, name = "Ana Updated", email = "ana.updated@test.com")
 
         Mockito.`when`(repository.findById(4L)).thenReturn(Optional.of(existing))
-        Mockito.`when`(repository.save(Mockito.any(Professor::class.java))).thenReturn(updated)
+        Mockito.`when`(repository.save(Mockito.any(Student::class.java))).thenReturn(updated)
         Mockito.`when`(mapper.toResponse(updated)).thenReturn(response)
 
         val result = service.update(4L, req)
@@ -106,7 +106,7 @@ class ProfessorServiceTest {
 
     @Test
     fun `update lanza excepciÃ³n cuando el nombre estÃ¡ vacÃ­o`() {
-        val req = ProfessorRequest(name = "   ", email = "garcia@test.com")
+        val req = StudentRequest(name = "   ", email = "empty@test.com")
 
         assertFailsWith<BlankMesaggeException> {
             service.update(4L, req)
@@ -114,28 +114,28 @@ class ProfessorServiceTest {
     }
 
     @Test
-    fun `update lanza excepciÃ³n cuando el profesor no existe`() {
-        val req = ProfessorRequest(name = "Dr. GarcÃ­a", email = "garcia@test.com")
+    fun `update lanza excepciÃ³n cuando el estudiante no existe`() {
+        val req = StudentRequest(name = "Ana", email = "ana@test.com")
 
         Mockito.`when`(repository.findById(10L)).thenReturn(Optional.empty())
 
-        assertFailsWith<ProfessorNotFoundException> {
+        assertFailsWith<StudentNotFoundException> {
             service.update(10L, req)
         }
     }
 
     @Test
-    fun `delete elimina cuando el profesor existe`() {
+    fun `delete elimina cuando el estudiante existe`() {
         Mockito.`when`(repository.existsById(5L)).thenReturn(true)
 
         assertEquals(Unit, service.delete(5L))
     }
 
     @Test
-    fun `delete lanza excepciÃ³n cuando el profesor no existe`() {
+    fun `delete lanza excepciÃ³n cuando el estudiante no existe`() {
         Mockito.`when`(repository.existsById(6L)).thenReturn(false)
 
-        assertFailsWith<ProfessorNotFoundException> {
+        assertFailsWith<StudentNotFoundException> {
             service.delete(6L)
         }
     }

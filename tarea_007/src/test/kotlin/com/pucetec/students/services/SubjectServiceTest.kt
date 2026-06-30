@@ -1,4 +1,4 @@
-﻿package com.pucetec.students.service
+﻿package com.pucetec.students.services
 
 import com.pucetec.students.Mappers.SubjectMapper
 import com.pucetec.students.dto.ProfessorResponse

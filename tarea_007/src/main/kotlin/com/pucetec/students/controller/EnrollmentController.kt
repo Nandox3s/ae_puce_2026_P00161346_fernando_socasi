@@ -2,7 +2,7 @@
 
 import com.pucetec.students.dto.EnrollmentRequest
 import com.pucetec.students.dto.EnrollmentStatusRequest
-import com.pucetec.students.service.EnrollmentService
+import com.pucetec.students.services.EnrollmentService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

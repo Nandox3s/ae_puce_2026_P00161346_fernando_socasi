@@ -1,7 +1,7 @@
 ﻿package com.pucetec.students.controller
 
 import com.pucetec.students.dto.StudentRequest
-import com.pucetec.students.service.StudentService
+import com.pucetec.students.services.StudentService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
